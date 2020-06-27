@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, {useContext } from "react";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -8,10 +8,17 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Link from "../src/Link";
 import { purple } from "@material-ui/core/colors";
+import  Router  from "next/router";
+import { AuthContext } from "../context/auth-context";
 
 import { createMuiTheme } from "@material-ui/core/styles";
-import { isAuth, SignOut } from "../actions/auth";
-import Router  from "next/router";
+import NProgress from "nprogress"; 
+
+
+
+Router.onRouteChangeStart=url=>NProgress.start();
+Router.onRouteChangeComplete=url=>NProgress.done();
+Router.onRouteChangeError=url=>NProgress.done();
 
 const theme = createMuiTheme({
   palette: {
@@ -38,33 +45,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Navigation() {
+export default function Navigation(props) {
   const classes = useStyles();
-  const [ch,setCh]=useState(false);
+  
+  const auth=useContext(AuthContext);
 
-  useEffect(()=>{
-    console.log('exxxx');
-    if(isAuth()){
-      setCh(true);
-    }
-  })
+ 
 
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
+          {auth.isLoggedIn &&<IconButton
             edge="start"
             className={classes.menuButton}
             color="inherit"
             aria-label="menu"
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton>}
           <Typography variant="h6" className={classes.title}>
             News
           </Typography>
-          {!isAuth() && (
+          {auth.isLoggedIn &&<Typography variant="h6" className={classes.title}>
+            {auth.userId}
+          </Typography>}
+          {!auth.isLoggedIn && (
             <Link href="/login" color="secondary">
               <ThemeProvider theme={theme}>
                 <Button variant="contained" color="primary">
@@ -73,9 +79,9 @@ export default function Navigation() {
               </ThemeProvider>
             </Link>
           )}
-          {ch && (
+          {auth.isLoggedIn && (
             <ThemeProvider theme={theme}>
-              <Button onClick={()=>{SignOut(()=>{Router.replace(`/login`)})}} variant="contained" color="secondary">
+              <Button onClick={auth.logout} variant="contained" color="secondary">
                 Sign out!
               </Button>
             </ThemeProvider>

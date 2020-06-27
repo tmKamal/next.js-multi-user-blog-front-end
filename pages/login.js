@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -11,10 +11,11 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Alert, AlertTitle } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
-import {SigninAction, authenticate, isAuth} from "../actions/auth";
+import { SigninAction, authenticate, isAuth } from "../actions/auth";
 import Router from "next/router";
+import { AuthContext } from "../context/auth-context";
 
 function Copyright() {
   return (
@@ -64,9 +65,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
+  const auth = useContext(AuthContext);
 
   const [values, setValues] = useState({
-    
     email: "",
     password: "",
     error: "",
@@ -75,15 +76,7 @@ export default function SignUp() {
     showForm: true,
   });
 
-  const {
-    
-    email,
-    password,
-    error,
-    loading,
-    msg,
-    showForm,
-  } = values;
+  const { email, password, error, loading, msg, showForm } = values;
 
   const onChangeHandler = (inputFieldName) => (e) => {
     setValues({
@@ -98,7 +91,6 @@ export default function SignUp() {
     e.preventDefault();
     console.table(values);
     const user = {
-      
       email: email,
       password: password,
     };
@@ -107,13 +99,7 @@ export default function SignUp() {
         setValues({ ...values, error: data.error });
         console.log(error);
       } else {
-        authenticate(data,()=>{
-          if(isAuth()&&isAuth().role===1){
-            Router.push(`/admin`);
-          }else{
-            Router.push(`/user`);
-          }
-        })
+        auth.login(data.user.username, data.token, data.user.role);
       }
     });
   };
@@ -132,12 +118,11 @@ export default function SignUp() {
           </Typography>
           <form onSubmit={submitHandler} className={classes.form} noValidate>
             <Grid container spacing={2}>
-              
               <Grid item xs={12}>
                 <TextField
                   onChange={onChangeHandler("email")}
                   value={email}
-                  error={error? true : false}
+                  error={error ? true : false}
                   variant="outlined"
                   margin="normal"
                   required
@@ -154,7 +139,6 @@ export default function SignUp() {
                 <TextField
                   onChange={onChangeHandler("password")}
                   value={password}
-                  
                   variant="outlined"
                   margin="normal"
                   required
@@ -163,16 +147,17 @@ export default function SignUp() {
                   label="Password"
                   type="password"
                   id="password"
-                  
                   autoComplete="current-password"
                 />
               </Grid>
-              {error&&<Grid item xs={12}>
-                <Alert severity="error">
-                  <AlertTitle>Error</AlertTitle>
-                  {error} <strong>check it out!</strong>
-                </Alert>
-              </Grid>}
+              {error && (
+                <Grid item xs={12}>
+                  <Alert severity="error">
+                    <AlertTitle>Error</AlertTitle>
+                    {error} <strong>check it out!</strong>
+                  </Alert>
+                </Grid>
+              )}
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
@@ -195,6 +180,9 @@ export default function SignUp() {
                 <Grid item>
                   <Link href="#" variant="body2">
                     {"Don't have an account? Sign Up"}
+                  </Link>
+                  <Link href="/admin" color="secondary">
+                    Go to the admin page
                   </Link>
                 </Grid>
               </Grid>
