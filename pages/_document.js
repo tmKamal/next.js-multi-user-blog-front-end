@@ -10,9 +10,20 @@ export default class MyDocument extends Document {
         <Head>
           {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
+          
+          {/* Roboto Font */}
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          />
+          {/* nprogress loader css */}
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css"
+          />
+          <link
+            rel="stylesheet"
+            href="/static/css/styles.css"
           />
         </Head>
         <body>
