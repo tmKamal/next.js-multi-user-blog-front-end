@@ -13,6 +13,7 @@ import { AuthContext } from "../context/auth-context";
 
 import { createMuiTheme } from "@material-ui/core/styles";
 import NProgress from "nprogress"; 
+import SearchInput from "./search";
 
 
 
@@ -64,12 +65,16 @@ export default function Navigation(props) {
           >
             <MenuIcon />
           </IconButton>}
-          <Typography variant="h6" className={classes.title}>
-            News
+          <Typography  variant="h6" className={classes.title}>
+            <Link color='inherit' href='/'>
+            Bloggle
+            
+            </Link>
           </Typography>
-          {auth.isLoggedIn &&<Typography variant="h6" className={classes.title}>
+          {/* {auth.isLoggedIn &&<Typography variant="h6" className={classes.title}>
             {auth.userId}
-          </Typography>}
+          </Typography>} */}
+          <SearchInput></SearchInput>
           {!auth.isLoggedIn && (
             <Link href="/login" color="secondary">
               <ThemeProvider theme={theme}>
