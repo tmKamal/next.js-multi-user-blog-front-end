@@ -43,7 +43,7 @@ export default function MyApp(props) {
       })
     );
     console.log("Manual logged in" + role + " " + token);
-    Router.push("/admin"); //redirect to the admin dashboard
+    //Router.push("/admin"); //redirect to the admin dashboard
   }, []);
 
   /* Auto Login (If token is not expired yet) -ACus*/

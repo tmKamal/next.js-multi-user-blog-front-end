@@ -19,8 +19,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="/">
+        Bloggle
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
   },
   image: {
-    backgroundImage: "url(https://source.unsplash.com/random)",
+    backgroundImage: "url(/sign-up.jpg)",
     backgroundRepeat: "no-repeat",
     backgroundColor:
       theme.palette.type === "light"
@@ -106,7 +106,7 @@ export default function SignUp() {
     SignupAction(user).then((data) => {
       if (data.error) {
         setValues({ ...values, error: data.error });
-        console.log(error);
+        console.log(data.error);
       } else {
         setValues({
           firstName: "",
@@ -168,7 +168,7 @@ export default function SignUp() {
                 <TextField
                   onChange={onChangeHandler("email")}
                   value={email}
-                  error={error? true : false}
+                  error={error.param==='email'? true : false}
                   variant="outlined"
                   margin="normal"
                   required
@@ -177,7 +177,7 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  helperText={error}
+                  helperText={error.msg}
                   autoFocus
                 />
               </Grid>
@@ -185,7 +185,7 @@ export default function SignUp() {
                 <TextField
                   onChange={onChangeHandler("password")}
                   value={password}
-                  
+                  error={error.param==='password'? true : false}
                   variant="outlined"
                   margin="normal"
                   required
@@ -194,20 +194,24 @@ export default function SignUp() {
                   label="Password"
                   type="password"
                   id="password"
-                  
+                  helperText={error.msg}
                   autoComplete="current-password"
                 />
+              
               </Grid>
               {error&&<Grid item xs={12}>
                 <Alert severity="error">
                   <AlertTitle>Error</AlertTitle>
-                  {error} <strong>check it out!</strong>
+                  {error.msg} <strong>check it out!</strong>
                 </Alert>
               </Grid>}
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+              {msg&&<Grid item xs={12}>
+                <Alert severity="success">
+                  <AlertTitle>Success</AlertTitle>
+                  {msg} <Link style={{fontWeight:'500'}} href='/login'>let's Sign In</Link>
+                </Alert>
+              </Grid>}
+              
               <Button
                 type="submit"
                 fullWidth
@@ -215,17 +219,15 @@ export default function SignUp() {
                 color="primary"
                 className={classes.submit}
               >
-                Sign In
+                Sign Up
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
+                  
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                  <Link href="/login" variant="body2">
+                    {"To  Sign In"}
                   </Link>
                 </Grid>
               </Grid>

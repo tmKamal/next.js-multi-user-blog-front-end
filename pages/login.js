@@ -21,8 +21,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="/">
+      Bloggle
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
   },
   image: {
-    backgroundImage: "url(https://source.unsplash.com/random)",
+    backgroundImage: "url(/sign-in.jpg)",
     backgroundRepeat: "no-repeat",
     backgroundColor:
       theme.palette.type === "light"
@@ -100,6 +100,7 @@ export default function SignUp() {
         console.log(error);
       } else {
         auth.login(data.user.username, data.token, data.user.role);
+        Router.push("/admin");
       }
     });
   };
@@ -122,7 +123,7 @@ export default function SignUp() {
                 <TextField
                   onChange={onChangeHandler("email")}
                   value={email}
-                  error={error ? true : false}
+                  error={error.param==='email'? true : false}
                   variant="outlined"
                   margin="normal"
                   required
@@ -131,7 +132,7 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  helperText={error}
+                  helperText={error.msg}
                   autoFocus
                 />
               </Grid>
@@ -140,6 +141,7 @@ export default function SignUp() {
                   onChange={onChangeHandler("password")}
                   value={password}
                   variant="outlined"
+                  error={error.param==='password'? true : false}
                   margin="normal"
                   required
                   fullWidth
@@ -154,7 +156,7 @@ export default function SignUp() {
                 <Grid item xs={12}>
                   <Alert severity="error">
                     <AlertTitle>Error</AlertTitle>
-                    {error} <strong>check it out!</strong>
+                    {error.msg} <strong>Try again!</strong>
                   </Alert>
                 </Grid>
               )}
@@ -178,12 +180,10 @@ export default function SignUp() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/signup" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
-                  <Link href="/admin" color="secondary">
-                    Go to the admin page
-                  </Link>
+                  
                 </Grid>
               </Grid>
             </Grid>
