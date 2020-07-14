@@ -39,8 +39,11 @@ const AdminLayout = ({ children }) => {
           <main className={classes.content}>
             
             <Container maxWidth="xl" className={classes.container}>
-            <Typography variant="h4" component="h1" gutterBottom>
-              Admin
+            <Typography color='inherit' style={{fontWeight:'700'}} variant="h5" component="h2" gutterBottom>
+              <Link href={'/admin'}>
+              DASH BOARD
+              
+              </Link>
             </Typography>
               <Grid container spacing={3}>
                 <Grid item xs={12} md={6} lg={3}>
@@ -61,7 +64,7 @@ const AdminLayout = ({ children }) => {
                     </ListItem>
                     <Divider />
                     <ListItem button divider>
-                      <Link
+                    <Link
                         className={classes.linkHref}
                         href="/admin/crud/tag-tag"
                         underline="none"
@@ -72,14 +75,14 @@ const AdminLayout = ({ children }) => {
                     </ListItem>
                     
                     <ListItem button>
-                      <Link
-                        className={classes.linkHref}
+                    <a
+                        className= "MuiTypography-root MuiLink-root MuiLink-underlineNone MuiTypography-colorSecondary"
                         href="/admin/crud/blog-create"
-                        underline="none"
-                        color="secondary"
+                        style={{fontSize: "1rem",
+                        fontWeight: "500"}}
                       >
                        Create Blog
-                      </Link>
+                      </a>
                     </ListItem>
                     <Divider />
                     <ListItem button>
