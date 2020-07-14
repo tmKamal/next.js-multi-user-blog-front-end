@@ -25,7 +25,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Alert, AlertTitle } from "@material-ui/lab";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CreateBlog = ({ router }) => {
+const UpdateBlog = ({ router }) => {
   const classes = useStyles();
   const auth = useContext(AuthContext);
   const blogFromLS = () => {
@@ -79,6 +79,7 @@ const CreateBlog = ({ router }) => {
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
   const [loadedCategories, setLoadedCategories] = useState();
   const [loadedTags, setLoadedTags] = useState();
+  const [loadedBlog, setLoadedBlog] = useState();
   const [checkedCategories, setCheckedCategories] = useState([]); //To store the selected categories.
   const [checkedTags, setCheckedTags] = useState([]); // To store the selected tags.
   const [succesMsg, setSuccessMsg] = useState(false);
@@ -115,10 +116,44 @@ const CreateBlog = ({ router }) => {
         setLoadedTags(await sendRequest(`${API}/tags`));
       } catch (error) {}
     };
+    //fetch blog
+    console.log(router);
+    const fetchBlog = async () => {
+      try {
+        setLoadedBlog(await sendRequest(`${API}/blog/${router.query.slug}`));
+        //console.log(loadedBlog);
+      } catch (err) {}
+    };
 
     fetchCategories();
     fetchTags();
+    fetchBlog();
   }, [router]);
+
+  useEffect(() => {
+    //to fill the title data field with existing value
+    if (loadedBlog) {
+      setValues({ ...values, title: loadedBlog.title });
+    }
+    //filling quil body with old values
+    if(loadedBlog){
+        setBody(loadedBlog.body);
+    }
+    //filling category old values
+    if (loadedBlog) {
+      console.log(loadedBlog.categories);
+      const allSelectedCats = [...checkedCategories];
+      loadedBlog.categories.map((cat) => allSelectedCats.push(cat._id));
+      setCheckedCategories(allSelectedCats);
+    }
+    //filling tag old values
+    if (loadedBlog) {
+      console.log(loadedBlog.tags);
+      const allSelectedTags = [...checkedTags];
+      loadedBlog.tags.map((tag) => allSelectedTags.push(tag._id));
+      setCheckedTags(allSelectedTags);
+    }
+  }, [loadedBlog]);
 
   const changeHandler = (name) => (event) => {
     const value = name === "photo" ? event.target.files[0] : event.target.value;
@@ -138,28 +173,31 @@ const CreateBlog = ({ router }) => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log("your pressed the submit button!!");
+    console.log("your pressed the updated submit button!!");
 
     try {
-      const resData = await sendRequest(`${API}/blog`, "POST", formData, {
-        Authorization: "Bearer " + auth.token,
-      });
+      const resData = await sendRequest(
+        `${API}/blog/${router.query.slug}`,
+        "PUT",
+        formData,
+        {
+          Authorization: "Bearer " + auth.token,
+        }
+      );
       if (resData) {
         setSuccessMsg(true);
         console.log(resData);
         localStorage.removeItem("blog");
       }
-    } catch (error) {
-     
-    }
+    } catch (error) {}
   };
 
   const toggleCategories = (id) => {
     // clearing errors, if any is present
     setValues({ ...values, bError: "" });
     // if category not available in the checkedCategories array. it will return -1
-    const clickedCategory = checkedCategories.indexOf(id);
     const allSelectedCats = [...checkedCategories];
+    const clickedCategory = checkedCategories.indexOf(id);
 
     if (clickedCategory === -1) {
       allSelectedCats.push(id);
@@ -192,7 +230,7 @@ const CreateBlog = ({ router }) => {
     <AdminLayout>
       <Grid item xs={12} md={6} lg={9}>
         <div className={classes.paperForForm}>
-          <img src="/humaaans.png" alt="blogimage" />
+          <img src="/editblog.png" alt="blog edit image" />
         </div>
       </Grid>
       <Grid container spacing={3}>
@@ -205,7 +243,7 @@ const CreateBlog = ({ router }) => {
               color="primary"
               gutterBottom
             >
-              Lets create the blog post...
+              Lets edit the blog post...
             </Typography>
             <form onSubmit={submitHandler} className={classes.form} noValidate>
               <TextField
@@ -231,37 +269,23 @@ const CreateBlog = ({ router }) => {
 
               {/* Image Uploader */}
 
-              <input
-                onChange={changeHandler("photo")}
-                accept="image/*"
-                className={classes.input}
-                id="contained-button-file"
-                multiple
-                type="file"
-                hidden
-              />
-              <label htmlFor="contained-button-file">
-                <Button
-                  startIcon={<PhotoCamera />}
-                  variant="contained"
-                  color="primary"
-                  component="span"
-                >
-                  Upload
-                </Button>
-              </label>
-
               {/* Categories (CheckBoxes) */}
 
               <p>Categories</p>
               <FormGroup row>
                 {loadedCategories &&
+                  loadedBlog &&
                   loadedCategories.map((c, i) => (
                     <FormControlLabel
                       key={i}
                       control={
                         <Checkbox
                           name={c.name}
+                          checked={
+                            checkedCategories.indexOf(c._id) === -1
+                              ? false
+                              : true
+                          }
                           onChange={() => toggleCategories(c._id)}
                         />
                       }
@@ -271,7 +295,7 @@ const CreateBlog = ({ router }) => {
               </FormGroup>
               <p>Tags</p>
               <FormGroup row>
-                {loadedTags &&
+                {loadedTags && loadedBlog &&
                   loadedTags.map((tag, i) => (
                     <FormControlLabel
                       key={i}
@@ -279,6 +303,11 @@ const CreateBlog = ({ router }) => {
                         <Checkbox
                           name={tag.name}
                           onChange={() => toggleTags(tag._id)}
+                          checked={
+                            checkedTags.indexOf(tag._id) === -1
+                              ? false
+                              : true
+                          }
                         />
                       }
                       label={tag.name}
@@ -298,14 +327,17 @@ const CreateBlog = ({ router }) => {
             {succesMsg && (
               <Alert severity="success">
                 <AlertTitle>Success</AlertTitle>
-                {succesMsg}
+                Blog has been updated successfully.
                 <strong>check it out!</strong>
               </Alert>
             )}
-            {error &&<Alert severity="error">
-              <AlertTitle>Error</AlertTitle>
-              {error}<strong>check it out!</strong>
-            </Alert>}
+            {error && (
+              <Alert severity="error">
+                <AlertTitle>Error</AlertTitle>
+                {error}
+                <strong>check it out!</strong>
+              </Alert>
+            )}
           </Paper>
         </Grid>
       </Grid>
@@ -314,4 +346,4 @@ const CreateBlog = ({ router }) => {
   );
 };
 
-export default withRouter(CreateBlog);
+export default withRouter(UpdateBlog);
