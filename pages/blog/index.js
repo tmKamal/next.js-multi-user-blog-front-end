@@ -8,7 +8,8 @@ import { APP_NAME, DOMAIN, FB_APP_ID } from "../../config";
 import { withRouter } from "next/router"; //router is for the canonical [SEO]
 import MainFeaturedPost from "../../components/blog/headerImage";
 import Chip from "@material-ui/core/Chip";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
+import Masonry from "react-masonry-css";
 
 const Blogs = ({
   blogs,
@@ -22,7 +23,13 @@ const Blogs = ({
   const [limit, setLimit] = useState(blogsLimit);
   const [skip, setSkip] = useState(0);
   const [size, setSize] = useState(totalBlogs);
-  const [loadedBlogs, setLoadedBlogs] = useState([]);
+  const [loadedBlogs, setLoadedBlogs] = useState( blogs);
+  const breakpointColumnsObj = {
+    default: 2,
+    1100: 2,
+    700: 2,
+    500: 1,
+  };
   const head = () => (
     <Head>
       <title>Programming blogs | {APP_NAME}</title>
@@ -75,16 +82,22 @@ const Blogs = ({
       return <BlogCard key={i} post={b}></BlogCard>;
     });
   };
-  
-  const listAllCategories=()=>{
-    return categories.map((c,i)=>{
-      return <Chip key={i} label={c.name} onClick={()=>categoryClickHandler(c.slug) } style={{marginRight:'10px',marginBottom:'20px'}}></Chip>
-    })
-  }
-  const categoryClickHandler=(slug)=>{
+
+  const listAllCategories = () => {
+    return categories.map((c, i) => {
+      return (
+        <Chip
+          key={i}
+          label={c.name}
+          onClick={() => categoryClickHandler(c.slug)}
+          style={{ marginRight: "10px", marginBottom: "20px" }}
+        ></Chip>
+      );
+    });
+  };
+  const categoryClickHandler = (slug) => {
     router.push(`/category/${slug}`);
-    
-  }
+  };
   return (
     <React.Fragment>
       {head()}
@@ -93,19 +106,30 @@ const Blogs = ({
           <Grid>
             <MainFeaturedPost></MainFeaturedPost>
           </Grid>
-          <Grid>
-          
-          
-          {listAllCategories()}
-          </Grid>
-          <Grid container spacing={4}>
+          <Grid>{listAllCategories()}</Grid>
+          {/* <Grid container spacing={4}>
             {listAllBlogs()}
             {showLoadedBlogs()}
-          </Grid>
+          </Grid> */}
+       
+            <Masonry
+              breakpointCols={breakpointColumnsObj}
+              className="my-masonry-grid"
+              columnClassName="my-masonry-grid_column"
+            >
+              {/* {listAllBlogs()} */}
+            {showLoadedBlogs()}
+            </Masonry>
+   
           <Grid>
             {size > 0 && size >= limit && (
-              <Button style={{marginTop:'1rem'}} onClick={loadMore} variant="contained" color="primary">
-                Load More!!
+              <Button
+                style={{ marginTop: "1rem" }}
+                onClick={loadMore}
+                variant="contained"
+                color="primary"
+              >
+                Load More Blogs!!
               </Button>
             )}
           </Grid>
