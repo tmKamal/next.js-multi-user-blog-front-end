@@ -12,7 +12,11 @@ export const DOMAIN = publicRuntimeConfig.PRODUCTION
   : publicRuntimeConfig.DOMAIN_DEVELOPMENT;
 
 //export const IMG=publicRuntimeConfig.IMG;
-export const IMG = publicRuntimeConfig.PRODUCTION
+
+/*
+ export const IMG = publicRuntimeConfig.PRODUCTION
   ? publicRuntimeConfig.PRODUCTION_IMG
   : publicRuntimeConfig.DEV_IMG;
+ */
+
 export const FB_APP_ID = publicRuntimeConfig.FB_APP_ID;

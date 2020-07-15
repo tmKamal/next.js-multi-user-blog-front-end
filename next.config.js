@@ -15,7 +15,7 @@ module.exports=withCSS({
         DOMAIN_DEVELOPMENT:'http://localhost:3000',
         DOMAIN_PRODUCTION:'http://yourdomain.com',
         FB_APP_ID:'6987fsak',
-        DEV_IMG:'http://localhost:8000',
-        PRODUCTION_IMG:'http://YOURDOMAIN'
+        //DEV_IMG:'http://localhost:8000',
+        //PRODUCTION_IMG:'http://YOURDOMAIN'
     }
 });
