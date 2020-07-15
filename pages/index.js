@@ -28,6 +28,7 @@ export default function Index() {
         </Typography>
         <div>
           <Grid container spacing={2} justify="center">
+           
             <Grid item>
               <Button href="/blog" variant="contained" color="primary">
                 Take a Peek

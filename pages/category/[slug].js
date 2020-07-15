@@ -6,7 +6,7 @@ import { getSingleBlog } from "../../actions/blogs";
 import { Box, Grid } from "@material-ui/core";
 
 import SingleBlogPost from "../../components/blog/blog-single-paper";
-import { IMG, APP_NAME, DOMAIN, FB_APP_ID } from "../../config";
+import { APP_NAME, DOMAIN, FB_APP_ID } from "../../config";
 import { getBlogsByCategoryId } from "../../actions/category";
 import BlogCard from "../../components/blog/blog-card";
 import Masonry from "react-masonry-css";
@@ -29,8 +29,8 @@ const SingleBlog = ({ category, blogs, error }) => {
       <meta property="og:type" content="website" />
       <meta property="og:url" content={`${DOMAIN}/${query.slug}`} />
       <meta property="og:site_name" content={`${APP_NAME}`} />
-      <meta property="og:image" content={`${IMG}${blog.photo}`} />
-      <meta property="og:image:secure_url" content={`${IMG}${blog.photo}`} />
+      <meta property="og:image" content={blog.photo} />
+      <meta property="og:image:secure_url" content={blog.photo} />
       <meta
         property="og:image:type"
         content={`image/${blog.photo.split(".").pop()}`}

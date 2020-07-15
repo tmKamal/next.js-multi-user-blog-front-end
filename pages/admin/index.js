@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { useHttpClient } from "../../hooks/http-hook";
 import { API } from "../../config";
 import { AuthContext } from "../../context/auth-context";
-import { IMG } from "../../config";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import ProTip from "../../src/ProTip";
@@ -114,7 +113,7 @@ const Index = () => {
                       <TableCell align="center">
                         <img
                           className={classes.img}
-                          src={`${IMG}/${blog.photo}`}
+                          src={blog.photo}
                           alt={blog.title}
                         ></img>
                       </TableCell>

@@ -6,7 +6,7 @@ import { getSingleBlog } from "../../actions/blogs";
 import { Box } from "@material-ui/core";
 
 import SingleBlogPost from "../../components/blog/blog-single-paper";
-import { IMG, APP_NAME, DOMAIN, FB_APP_ID } from "../../config";
+import { APP_NAME, DOMAIN, FB_APP_ID } from "../../config";
 import BlogSinglePageLayout from "../../layouts/blog-single-page-layout";
 
 const SingleBlog = ({ blog, query, error }) => {
@@ -33,11 +33,11 @@ const SingleBlog = ({ blog, query, error }) => {
       <meta property="og:site_name" content={`${APP_NAME}`} />
       <meta
         property="og:image"
-        content={`${IMG}${blog.photo}`}
+        content={blog.photo}
       />
       <meta
         property="og:image:secure_url"
-        content={`${IMG}${blog.photo}`}
+        content={blog.photo}
       />
       <meta property="og:image:type" content={`image/${blog.photo.split(".").pop()}`} />
       <meta property="fb:app_id" content={`${FB_APP_ID}`} />

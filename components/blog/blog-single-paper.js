@@ -5,7 +5,7 @@ import renderHTML from "react-render-html";
 import { useHttpClient } from "../../hooks/http-hook";
 import { API } from "../../config";
 import moment from 'moment';
-import { IMG } from "../../config";
+
 import RelatedBlogCard from "./related-blog-card";
 
 
@@ -71,7 +71,7 @@ function SingleBlogPost({bPost}) {
                 {moment(bPost.updatedAt).fromNow()}
                 </Typography>
               </Box>
-              <img className={classes.img} src={`${IMG}/${bPost.photo}`} alt="" />
+              <img className={classes.img} src={bPost.photo} alt="" />
               <Box p={3}>{renderHTML(bPost.body) }</Box>
             </Card>
           </Grid>

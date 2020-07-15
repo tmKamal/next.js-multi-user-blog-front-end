@@ -9,7 +9,7 @@ import Hidden from '@material-ui/core/Hidden';
 
 import moment from 'moment';
 import renderHTML from 'react-render-html';
-import { IMG } from '../../config';
+
 
 
 const useStyles = makeStyles({
@@ -51,7 +51,7 @@ const BlogCard=({post})=> {
             </CardContent>
           </div>
           <Hidden xsDown>
-            <CardMedia className={classes.cardMedia} image={`${IMG}/${post.photo}`} title={post.imageTitle} />
+            <CardMedia className={classes.cardMedia} image={post.photo} title={post.imageTitle} />
           </Hidden>
         </Card>
       </CardActionArea>
