@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StandardLayout from "../../layouts/standard-layout";
 import Head from "next/head";
 import BlogCard from "../../components/blog/blog-card";
 import { getAllBlogs } from "../../actions/blogs";
-import { Grid, Box, Button } from "@material-ui/core";
+import { Grid, Box, Button, LinearProgress } from "@material-ui/core";
 import { APP_NAME, DOMAIN, FB_APP_ID } from "../../config";
 import { withRouter } from "next/router"; //router is for the canonical [SEO]
 import MainFeaturedPost from "../../components/blog/headerImage";
@@ -23,7 +23,8 @@ const Blogs = ({
   const [limit, setLimit] = useState(blogsLimit);
   const [skip, setSkip] = useState(0);
   const [size, setSize] = useState(totalBlogs);
-  const [loadedBlogs, setLoadedBlogs] = useState( blogs);
+  const [loadedBlogs, setLoadedBlogs] = useState(blogs);
+  const [isLoading, setIsLoading] = useState(false);
   const breakpointColumnsObj = {
     default: 2,
     1100: 2,
@@ -58,7 +59,14 @@ const Blogs = ({
       <meta property="fb:app_id" content={`${FB_APP_ID}`} />
     </Head>
   );
+
+  useEffect(() => {
+    console.log("rerendered");
+  }, [isLoading]);
+
   const loadMore = async () => {
+    setIsLoading(true);
+
     let toSkip = skip + limit;
     try {
       const data = await getAllBlogs(toSkip, limit);
@@ -68,12 +76,15 @@ const Blogs = ({
         setLoadedBlogs([...loadedBlogs, ...data.blogs]);
         setSize(data.size);
         setSkip(toSkip);
+        setIsLoading(false);
       }
-    } catch (err) {}
+    } catch (err) {
+      setIsLoading(false);
+    }
   };
   const showLoadedBlogs = () => {
     return loadedBlogs.map((lb, i) => {
-      return <BlogCard key={i} post={lb}></BlogCard>;
+      return <BlogCard key={i} post={lb} ></BlogCard>;
     });
   };
 
@@ -111,16 +122,18 @@ const Blogs = ({
             {listAllBlogs()}
             {showLoadedBlogs()}
           </Grid> */}
-       
-            <Masonry
-              breakpointCols={breakpointColumnsObj}
-              className="my-masonry-grid"
-              columnClassName="my-masonry-grid_column"
-            >
-              {/* {listAllBlogs()} */}
+
+          <Masonry
+            breakpointCols={breakpointColumnsObj}
+            className="my-masonry-grid"
+            columnClassName="my-masonry-grid_column"
+          >
+            {/* {listAllBlogs()} */}
             {showLoadedBlogs()}
-            </Masonry>
-   
+          </Masonry>
+
+          {isLoading && <LinearProgress />}
+
           <Grid>
             {size > 0 && size >= limit && (
               <Button

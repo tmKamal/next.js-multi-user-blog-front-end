@@ -61,7 +61,7 @@ function SingleBlogPost({bPost}) {
     >
       <div className={classes.blogContentWrapper}>
         <Grid container spacing={5}>
-          <Grid item lg={9}>
+          <Grid item lg={9} md={12}>
             <Card className={classes.card}>
               <Box pt={3} pr={3} pl={3} pb={2}>
                 <Typography variant="h4">
