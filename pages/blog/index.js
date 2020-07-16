@@ -3,13 +3,27 @@ import StandardLayout from "../../layouts/standard-layout";
 import Head from "next/head";
 import BlogCard from "../../components/blog/blog-card";
 import { getAllBlogs } from "../../actions/blogs";
-import { Grid, Box, Button, LinearProgress } from "@material-ui/core";
+import { Grid, Box, Button, LinearProgress, makeStyles, CircularProgress } from "@material-ui/core";
 import { APP_NAME, DOMAIN, FB_APP_ID } from "../../config";
 import { withRouter } from "next/router"; //router is for the canonical [SEO]
 import MainFeaturedPost from "../../components/blog/headerImage";
 import Chip from "@material-ui/core/Chip";
-import { useRouter } from "next/router";
+
 import Masonry from "react-masonry-css";
+const useStyles = makeStyles((theme) => ({
+  wrapper: {
+    margin: theme.spacing(1),
+    position: 'relative',
+  },
+  buttonProgress: {
+    
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
+}));
 
 const Blogs = ({
   blogs,
@@ -20,6 +34,7 @@ const Blogs = ({
   blogSkip,
   router,
 }) => {
+  const classes = useStyles();
   const [limit, setLimit] = useState(blogsLimit);
   const [skip, setSkip] = useState(0);
   const [size, setSize] = useState(totalBlogs);
@@ -135,17 +150,24 @@ const Blogs = ({
           {isLoading && <LinearProgress />}
 
           <Grid>
+          <div className={classes.wrapper}>
             {size > 0 && size >= limit && (
               <Button
                 style={{ marginTop: "1rem" }}
                 onClick={loadMore}
                 variant="contained"
                 color="primary"
+                disabled={isLoading}
               >
                 Load More Blogs!!
               </Button>
             )}
+            {isLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
+            </div>
           </Grid>
+
+          
+
         </Box>
       </StandardLayout>
     </React.Fragment>
