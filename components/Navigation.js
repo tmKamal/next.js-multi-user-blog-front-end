@@ -1,25 +1,23 @@
-import React, {useContext } from "react";
+import React, { useContext, useState } from "react";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
+
 import Link from "../src/Link";
 import { purple } from "@material-ui/core/colors";
-import  Router  from "next/router";
+
 import { AuthContext } from "../context/auth-context";
 
 import { createMuiTheme } from "@material-ui/core/styles";
-import NProgress from "nprogress"; 
+
 import SearchInput from "./search";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from '@material-ui/core/MenuItem';
 
-
-
-Router.onRouteChangeStart=url=>NProgress.start();
-Router.onRouteChangeComplete=url=>NProgress.done();
-Router.onRouteChangeError=url=>NProgress.done();
 
 const theme = createMuiTheme({
   palette: {
@@ -48,27 +46,27 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Navigation(props) {
   const classes = useStyles();
-  
-  const auth=useContext(AuthContext);
+  const auth = useContext(AuthContext);
 
- 
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          {auth.isLoggedIn &&<IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>}
-          <Typography  variant="h6" className={classes.title}>
-            <Link color='inherit' href='/'>
-            Bloggle
-            
+          
+          <Typography variant="h6" className={classes.title}>
+            <Link color="inherit" href="/">
+              Bloggle
             </Link>
           </Typography>
           {/* {auth.isLoggedIn &&<Typography variant="h6" className={classes.title}>
@@ -84,12 +82,38 @@ export default function Navigation(props) {
               </ThemeProvider>
             </Link>
           )}
+         
           {auth.isLoggedIn && (
-            <ThemeProvider theme={theme}>
-              <Button onClick={auth.logout} variant="contained" color="secondary">
-                Sign out!
-              </Button>
-            </ThemeProvider>
+            <div>
+              <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={open}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose} ><Link color='inherit' underline='none' href='/admin'>Dashboard</Link></MenuItem>
+                <MenuItem onClick={handleClose} ><Link color='inherit' underline='none' href='/blog'>Blogs</Link></MenuItem>
+                <MenuItem onClick={auth.logout}>logout</MenuItem>
+              </Menu>
+            </div>
           )}
         </Toolbar>
       </AppBar>
