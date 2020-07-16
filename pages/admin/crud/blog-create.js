@@ -13,6 +13,7 @@ import {
   Grid,
   Button,
   TextField,
+  Link,
 } from "@material-ui/core";
 
 import AdminLayout from "../../../layouts/admin-layout";
@@ -59,7 +60,9 @@ const useStyles = makeStyles((theme) => ({
   },
   quill: {
     marginBottom: "1rem",
-  },
+  },mTop:{
+    marginTop:"1rem"
+  }
 }));
 
 const CreateBlog = ({ router }) => {
@@ -82,6 +85,9 @@ const CreateBlog = ({ router }) => {
   const [checkedCategories, setCheckedCategories] = useState([]); //To store the selected categories.
   const [checkedTags, setCheckedTags] = useState([]); // To store the selected tags.
   const [succesMsg, setSuccessMsg] = useState(false);
+  const [previewUrl,setPreviewUrl]=useState();
+  const [file,setFile]=useState();
+  const [responseData,setResponseData]=useState();
   const [values, setValues] = useState({
     bError: "",
     sizeError: "",
@@ -98,6 +104,17 @@ const CreateBlog = ({ router }) => {
     title,
     hidePublishButton,
   } = values;
+  useEffect(()=>{
+    if(!file){
+        return;
+    }
+    /* in here we access the browser file reader API to get the image url */
+    const fileReader=new FileReader();
+    fileReader.onload=()=>{
+        setPreviewUrl(fileReader.result);
+    }
+    fileReader.readAsDataURL(file);
+},[file]);
 
   useEffect(() => {
     //intiate FormData into formdata field
@@ -122,6 +139,11 @@ const CreateBlog = ({ router }) => {
 
   const changeHandler = (name) => (event) => {
     const value = name === "photo" ? event.target.files[0] : event.target.value;
+    let pickedFile;
+    if(name==='photo'){
+      pickedFile=event.target.files[0];
+            setFile(pickedFile);
+    }
     console.log(value);
     formData.set(name, value);
     setValues({ ...values, bError: "", [name]: value, formData }); //clearing errors, if any presents.
@@ -145,7 +167,9 @@ const CreateBlog = ({ router }) => {
         Authorization: "Bearer " + auth.token,
       });
       if (resData) {
+        setResponseData(resData);
         setSuccessMsg(true);
+
         console.log(resData);
         localStorage.removeItem("blog");
       }
@@ -230,7 +254,10 @@ const CreateBlog = ({ router }) => {
               ></ReactQuill>
 
               {/* Image Uploader */}
-
+              <div className="image-upload__preview">
+                    {previewUrl &&<img src={previewUrl} alt="preview"></img>}
+                    {!previewUrl &&<p>Choose a image.</p>}
+                </div>
               <input
                 onChange={changeHandler("photo")}
                 accept="image/*"
@@ -295,16 +322,16 @@ const CreateBlog = ({ router }) => {
                 Publish
               </Button>
             </form>
-            {succesMsg && (
-              <Alert severity="success">
-                <AlertTitle>Success</AlertTitle>
-                {succesMsg}
-                <strong>check it out!</strong>
+            {succesMsg && responseData && (
+              <Alert className={classes.mTop} severity="success">
+                <AlertTitle>Success! </AlertTitle>
+                
+                <strong>Blog post has been published</strong><Link style={{fontWeight:'500'}} href={`/blog/${responseData.slug}`}>&nbsp;&nbsp;To your new blog post</Link>
               </Alert>
             )}
-            {error &&<Alert severity="error">
+            {error &&<Alert className={classes.mTop}  severity="error">
               <AlertTitle>Error</AlertTitle>
-              {error}<strong>check it out!</strong>
+              <strong>{error}</strong>
             </Alert>}
           </Paper>
         </Grid>
