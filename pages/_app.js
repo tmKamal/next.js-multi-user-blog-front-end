@@ -7,6 +7,11 @@ import theme from "../src/theme";
 import { AuthContext } from "../context/auth-context";
 import Router, { useRouter } from "next/router";
 import Index from ".";
+import NProgress from "nprogress";
+
+Router.onRouteChangeStart = (url) => NProgress.start();
+Router.onRouteChangeComplete = (url) => NProgress.done();
+Router.onRouteChangeError = (url) => NProgress.done();
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
