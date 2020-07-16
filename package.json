@@ -13,7 +13,7 @@
     "moment": "^2.27.0",
     "next": "latest",
     "nprogress": "^0.2.0",
-    "prop-types": "latest",
+    "prop-types": "^15.7.2",
     "query-string": "^6.13.1",
     "react": "latest",
     "react-dom": "latest",

@@ -1,13 +1,13 @@
-import React, { useEffect,useState } from "react";
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Typography, Card, Box } from "@material-ui/core";
 import renderHTML from "react-render-html";
 import { useHttpClient } from "../../hooks/http-hook";
 import { API } from "../../config";
-import moment from 'moment';
+import moment from "moment";
 
 import RelatedBlogCard from "./related-blog-card";
-
+import DisqusThread from "../disqus";
 
 const useStyles = makeStyles((theme) => ({
   blogContentWrapper: {
@@ -32,26 +32,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SingleBlogPost({bPost}) {
+function SingleBlogPost({ bPost }) {
   const classes = useStyles();
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
-  const [loadedRelatedBlogs,setLoadedRelatedBlog]=useState();
+  const [loadedRelatedBlogs, setLoadedRelatedBlog] = useState();
 
-  console.log(bPost)
+  console.log(bPost);
   useEffect(() => {
     const fetchRelatedblogs = async () => {
       try {
-        setLoadedRelatedBlog(await sendRequest(`${API}/blog/related`,"POST",
-        JSON.stringify(bPost),{
-          "Content-Type": "application/json"
-          
-        } ));
+        setLoadedRelatedBlog(
+          await sendRequest(
+            `${API}/blog/related`,
+            "POST",
+            JSON.stringify(bPost),
+            {
+              "Content-Type": "application/json",
+            }
+          )
+        );
         //console.log(loadedBlog);
       } catch (err) {}
     };
     fetchRelatedblogs();
-    
-  }, [])
+  }, []);
+
+  const showComments = () => {
+    return (
+      <div>
+        <DisqusThread
+          id={bPost.id}
+          title={bPost.title}
+          path={`/blog/${bPost.slug}`}
+        />
+      </div>
+    );
+  };
 
   return (
     <Box
@@ -68,31 +84,31 @@ function SingleBlogPost({bPost}) {
                   <b>{bPost.title}</b>
                 </Typography>
                 <Typography variant="body1" color="textSecondary">
-                {moment(bPost.updatedAt).fromNow()}
+                  {moment(bPost.updatedAt).fromNow()}
                 </Typography>
               </Box>
               <img className={classes.img} src={bPost.photo} alt="" />
-              <Box p={3}>{renderHTML(bPost.body) }</Box>
+              <Box p={3}>{renderHTML(bPost.body)}</Box>
             </Card>
           </Grid>
-          <Grid container alignContent="flex-start" spacing={3} item lg={3} md={12}>
+          <Grid
+            container
+            alignContent="flex-start"
+            spacing={3}
+            item
+            lg={3}
+            md={12}
+          >
             {/* <Typography variant="h6" paragraph>
               Other arcticles
             </Typography> */}
-            {!isLoading && loadedRelatedBlogs && loadedRelatedBlogs.blogs.map((b,i)=>(
-              <RelatedBlogCard key={i} post={b}></RelatedBlogCard>
-            ))}
-            {/* {otherArticles.map(SingleblogPost => (
-              <Box key={SingleblogPost.id} mb={3}>
-                <BlogCard
-                  title={SingleblogPost.title}
-                  snippet={SingleblogPost.snippet}
-                  date={SingleblogPost.date}
-                  url={`${SingleblogPost.url}${SingleblogPost.params}`}
-                />
-              </Box>
-            ))} */}
+            {!isLoading &&
+              loadedRelatedBlogs &&
+              loadedRelatedBlogs.blogs.map((b, i) => (
+                <RelatedBlogCard key={i} post={b}></RelatedBlogCard>
+              ))}
           </Grid>
+              <Grid item sm={12}>{showComments()}</Grid>
         </Grid>
       </div>
     </Box>
