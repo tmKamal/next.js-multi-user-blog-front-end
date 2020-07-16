@@ -28,20 +28,23 @@ export default function Index() {
         </Typography>
         <div>
           <Grid container spacing={2} justify="center">
-           
             <Grid item>
-              <Button href="/blog" variant="contained" color="primary">
-                Take a Peek
-              </Button>
+              <Link href="/blog">
+                <Button  variant="contained" color="primary">
+                  Take a Peek
+                </Button>
+              </Link>
             </Grid>
             <Grid item>
-              <Button href="/admin" variant="outlined" color="primary">
-                Admin Panel
-              </Button>
+              <Link href="/admin">
+                <Button  variant="outlined" color="primary">
+                  Admin Panel
+                </Button>
+              </Link>
             </Grid>
           </Grid>
         </div>
-       {/*  <Link href="/about" color="secondary">
+        {/*  <Link href="/about" color="secondary">
           Go to the about page
         </Link>
         <br></br>
