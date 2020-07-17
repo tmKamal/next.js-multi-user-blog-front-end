@@ -1,14 +1,29 @@
 import fetch from 'isomorphic-fetch';
 import {API} from '../config';
 import cookie from 'js-cookie';
-export const SignupAction=(user)=>{
-    return fetch(`${API}/signup`,{
+
+
+export const PreSignupAction=(user)=>{
+    return fetch(`${API}/pre-signup`,{
         method:'POST',
         headers:{
             Accept:'application/json',
             'Content-Type':'application/json'
         },
         body:JSON.stringify(user)
+    }).then((response)=>{
+        return response.json();
+    }).catch(err=>console.log(err))
+}
+
+export const SignupAction=(token)=>{
+    return fetch(`${API}/signup`,{
+        method:'POST',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify(token)
     }).then((response)=>{
         return response.json();
     }).catch(err=>console.log(err))
