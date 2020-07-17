@@ -23,13 +23,15 @@ export default function MyApp(props) {
   const [token, setToken] = useState(false);
   const [userId, setUserId] = useState(false);
   const [role, setRole] = useState(false);
+  const [name, setName] = useState(false);
   const [tokenExpAuto, setTokenExpAuto] = useState();
 
   /* Login -ACus*/
-  const login = useCallback((uid, token, role, tokenExpDate) => {
+  const login = useCallback((uid, token, role, name, tokenExpDate) => {
     setToken(token);
     setUserId(uid);
     setRole(role);
+    setName(name);
     let tokenExp;
     if (!tokenExpDate) {
       tokenExp = new Date(new Date().getTime() + 1000 * 60 * 60);
@@ -44,10 +46,11 @@ export default function MyApp(props) {
         userId: uid,
         token: token,
         role: role,
+        name:name,
         tokenExp: tokenExp.toISOString(), //setting expiration time for the token we gonna store in the local storage.
       })
     );
-    console.log("Manual logged in" + role + " " + token);
+    console.log("Manual logged in" + role);
     //Router.push("/admin"); //redirect to the admin dashboard
   }, []);
 
@@ -63,6 +66,7 @@ export default function MyApp(props) {
         storedData.userId,
         storedData.token,
         storedData.role,
+        storedData.name,
         new Date(storedData.tokenExp)
       );
     }
@@ -74,6 +78,7 @@ export default function MyApp(props) {
     setUserId(null);
     setRole(null);
     setToken(null);
+    setName(null);
 
     localStorage.removeItem("userData");
     localStorage.clear();
@@ -106,7 +111,7 @@ export default function MyApp(props) {
   return (
     <React.Fragment>
       <Head>
-        <title>My page</title>
+        <title>Dev-Engine</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
@@ -120,6 +125,7 @@ export default function MyApp(props) {
             isLoggedIn: !!token,
             token: token,
             role: role,
+            name:name,
             userId: userId,
             login: login,
             logout: logout,

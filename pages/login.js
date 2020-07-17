@@ -22,7 +22,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="/">
-      Bloggle
+      Dev-Engine
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -99,7 +99,7 @@ export default function SignUp() {
         setValues({ ...values, error: data.error });
         console.log(error);
       } else {
-        auth.login(data.user.username, data.token, data.user.role);
+        auth.login(data.user.username, data.token, data.user.role, data.user.name);
         Router.push("/admin");
       }
     });
