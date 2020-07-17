@@ -90,6 +90,7 @@ export default function SignUp() {
     setValues({
       ...values,
       error: false,
+      msg:false,
       [inputFieldName]: e.target.value,
       loading: true,
     });
@@ -207,8 +208,8 @@ export default function SignUp() {
               </Grid>}
               {msg&&<Grid item xs={12}>
                 <Alert severity="success">
-                  <AlertTitle>Success</AlertTitle>
-                  {msg} <Link style={{fontWeight:'500'}} href='/login'>let's Sign In</Link>
+                  <AlertTitle>Confirm your email address</AlertTitle>
+                  {msg} <p>In order to complete the sign-up process, please click the confirmation link.</p>
                 </Alert>
               </Grid>}
               

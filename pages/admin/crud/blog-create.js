@@ -146,10 +146,14 @@ const CreateBlog = ({ router }) => {
     }
     console.log(value);
     formData.set(name, value);
-    setValues({ ...values, bError: "", [name]: value, formData }); //clearing errors, if any presents.
+    setValues({ ...values, [name]: value, formData });
+    setSuccessMsg(false);//clearing success messages.
+    errorPopupCloser();//Clearing errors, using hook output error clearing method
   };
 
   const bodyHandler = (e) => {
+    setSuccessMsg(false);//clearing success messages.
+    errorPopupCloser();//Clearing errors, using hook output error clearing method
     console.log(e);
     setBody(e);
     formData.set("body", e);
@@ -169,6 +173,7 @@ const CreateBlog = ({ router }) => {
       if (resData) {
         setResponseData(resData);
         setSuccessMsg(true);
+        
 
         console.log(resData);
         localStorage.removeItem("blog");
@@ -179,8 +184,8 @@ const CreateBlog = ({ router }) => {
   };
 
   const toggleCategories = (id) => {
-    // clearing errors, if any is present
-    setValues({ ...values, bError: "" });
+   
+    errorPopupCloser(); // clearing errors, if any is present
     // if category not available in the checkedCategories array. it will return -1
     const clickedCategory = checkedCategories.indexOf(id);
     const allSelectedCats = [...checkedCategories];
@@ -196,8 +201,7 @@ const CreateBlog = ({ router }) => {
   };
 
   const toggleTags = (id) => {
-    // clearing errors, if any is present
-    setValues({ ...values, bError: "" });
+    errorPopupCloser(); // clearing errors, if any is present
     // if tags not available in the checkedTags array. it will return -1
     const clickedTag = checkedTags.indexOf(id);
     const allSelectedTags = [...checkedTags];

@@ -2,7 +2,7 @@ import {useState,useEffect,useCallback,useRef} from "react";
 
 export const useHttpClient=()=>{
     const[isLoading,setIsLoading]=useState(false);
-    const[error,Error]=useState(false);
+    const[error,setError]=useState(false);
 
     const activeHttpRequest=useRef([]);
 
@@ -18,7 +18,7 @@ export const useHttpClient=()=>{
             const responseData=await response.json();
             activeHttpRequest.current=activeHttpRequest.current.filter(reqCtrl=>reqCtrl !==httpAbortCtrl);
             if(!response.ok){
-                throw new Error(responseData.error);
+                throw responseData.error;
             }
             setIsLoading(false);
             return responseData;

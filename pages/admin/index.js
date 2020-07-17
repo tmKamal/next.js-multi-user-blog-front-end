@@ -18,6 +18,11 @@ import {
   IconButton,
   Typography,
   Link,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  DialogTitle,
 } from "@material-ui/core";
 
 import CreateIcon from "@material-ui/icons/Create";
@@ -25,6 +30,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { green, red } from "@material-ui/core/colors";
 
 import AdminLayout from "../../layouts/admin-layout";
+import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,6 +75,10 @@ const Index = () => {
     setReload,
   ] = useState(); /* resend the gettgegories request, After deleting a record.  */
   const [loadedBlogs, setLoadedBlogs] = useState();
+  const [deleteSuccMsg, setDeleteSuccMsg] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [blogSlug, setBlogSlug] = useState();
+
   useEffect(() => {
     const fetchBlogsByUserId = async () => {
       try {
@@ -82,6 +92,45 @@ const Index = () => {
     fetchBlogsByUserId();
   }, [sendRequest, reload]);
 
+  /* Chip Delete */
+  const blogDeleteHandler = (slug) => {
+    console.info("You clicked the delete icon." + slug);
+    setBlogSlug(slug);
+    handleClickOpen();
+  };
+
+  /* popUpOpener */
+  const handleClickOpen = () => {
+    console.log("should open the dialog");
+    setOpen(true);
+  };
+  const handleDelete = () => {
+    console.log("im in!!");
+    /* Delete Request */
+    const deleteBlog = async () => {
+      try {
+        const delMsg = await sendRequest(
+          `${API}/blog/${blogSlug}`,
+          "DELETE",
+          null,
+          { Authorization: "Bearer " + auth.token }
+        );
+        if (delMsg) {
+          handleClose();
+          setDeleteSuccMsg(true);
+          setReload(!reload);
+        }
+      } catch (error) {
+        handleClose();
+      }
+    };
+    deleteBlog();
+  };
+  /* PopUpCloser */
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <AdminLayout>
       <Grid item xs={12} md={6} lg={9}>
@@ -91,6 +140,16 @@ const Index = () => {
       </Grid>
       <Grid container spacing={3}>
         <Grid item xs={12}>
+          {deleteSuccMsg && (
+            <Alert
+              onClose={() => {
+                setDeleteSuccMsg(false);
+              }}
+            >
+              Blog has been successfully deleted.
+            </Alert>
+          )}
+
           <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="simple table">
               <TableHead>
@@ -128,7 +187,11 @@ const Index = () => {
                         </IconButton>
                       </TableCell>
                       <TableCell align="center">
-                        <IconButton color="secondary" aria-label="add an alarm">
+                        <IconButton
+                          onClick={() => blogDeleteHandler(blog.slug)}
+                          color="secondary"
+                          aria-label="add an alarm"
+                        >
                           <DeleteIcon style={{ color: red[500] }} />
                         </IconButton>
                       </TableCell>
@@ -165,6 +228,30 @@ const Index = () => {
           )}
         </Grid>
       </Grid>
+      {/* PopUp Dialog for delete confirmation*/}
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Delete confiramtion dialog box?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you realy wanted to delete this Blog?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDelete} color="primary">
+            Yes
+          </Button>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
     </AdminLayout>
   );
 };
