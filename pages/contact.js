@@ -129,7 +129,7 @@ export default function Index() {
             paragraph
           >
             We love to hear from you. Simply send us a message using our contact
-            form and let us know how we can make Bloggler platform work better
+            form and let us know how we can make Dev-Engine blogging platform work better
             for you.
           </Typography>
           <div>

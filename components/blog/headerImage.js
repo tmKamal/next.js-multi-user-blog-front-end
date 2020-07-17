@@ -80,7 +80,7 @@ export default function MainFeaturedPost(props) {
                 color="inherit"
                 gutterBottom
               >
-                Bloggle
+                Dev-Engine
               </Typography>
               <Typography style={{fontWeight:'300'}} variant="h5" color="inherit" paragraph>
                 Talk is cheap <br></br> Show me the code

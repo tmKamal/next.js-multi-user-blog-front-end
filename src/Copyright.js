@@ -7,7 +7,7 @@ export default function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <MuiLink color="inherit" href="#">
-        Bloggle
+        Dev-Engine
       </MuiLink>{' '}
       {new Date().getFullYear()}
       {'.'}

@@ -13,14 +13,14 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { makeStyles } from "@material-ui/core/styles";
-import {SignupAction,SigninAction} from "../actions/auth";
+import {SignupAction,SigninAction, PreSignupAction} from "../actions/auth";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="/">
-        Bloggle
+        Dev-Engine
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -103,7 +103,7 @@ export default function SignUp() {
       email: email,
       password: password,
     };
-    SignupAction(user).then((data) => {
+    PreSignupAction(user).then((data) => {
       if (data.error) {
         setValues({ ...values, error: data.error });
         console.log(data.error);

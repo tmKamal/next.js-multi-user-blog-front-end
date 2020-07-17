@@ -2,13 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useHttpClient } from "../../hooks/http-hook";
 import { API } from "../../config";
 import { AuthContext } from "../../context/auth-context";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import ProTip from "../../src/ProTip";
-import Link from "../../src/Link";
-import Copyright from "../../src/Copyright";
 
-import StickyFooter from "../../components/StickyFooter";
 import {
   makeStyles,
   Container,
@@ -22,15 +16,14 @@ import {
   TableBody,
   Button,
   IconButton,
+  Typography,
+  Link,
 } from "@material-ui/core";
 
 import CreateIcon from "@material-ui/icons/Create";
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from "@material-ui/icons/Delete";
 import { green, red } from "@material-ui/core/colors";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 
-import Divider from "@material-ui/core/Divider";
 import AdminLayout from "../../layouts/admin-layout";
 
 const useStyles = makeStyles((theme) => ({
@@ -45,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "1rem",
     fontWeight: "500",
   },
+  paperForForm: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
 
   container: {
     paddingTop: theme.spacing(4),
@@ -56,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
   img: {
     maxHeight: "30px",
     minWidth: "auto",
+  },
+  marginT: {
+    marginTop: "2rem",
   },
 }));
 
@@ -118,7 +119,11 @@ const Index = () => {
                         ></img>
                       </TableCell>
                       <TableCell align="center">
-                        <IconButton href={`/admin/crud/${blog.slug}`} color="secondary" aria-label="edit the blog">
+                        <IconButton
+                          href={`/admin/crud/${blog.slug}`}
+                          color="secondary"
+                          aria-label="edit the blog"
+                        >
                           <CreateIcon />
                         </IconButton>
                       </TableCell>
@@ -132,6 +137,32 @@ const Index = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          {!isLoading && loadedBlogs && loadedBlogs.blogs.length === 0 && (
+            <React.Fragment>
+              <Typography
+                variant="h5"
+                align="center"
+                color="textSecondary"
+                paragraph
+                className={classes.marginT}
+              >
+                You haven’t published any blog stories yet
+              </Typography>
+              <div>
+                <Grid container spacing={2} justify="center">
+                  <Grid item>
+                    <Button
+                      href="/admin/crud/blog-create"
+                      variant="outlined"
+                      color="primary"
+                    >
+                      Create One Now
+                    </Button>
+                  </Grid>
+                </Grid>
+              </div>
+            </React.Fragment>
+          )}
         </Grid>
       </Grid>
     </AdminLayout>
