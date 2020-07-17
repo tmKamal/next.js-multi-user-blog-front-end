@@ -64,14 +64,21 @@ export default function Navigation(props) {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
+
             <Link color="inherit" href="/">
+            <Hidden only='xs'>
               Dev-Engine
+            </Hidden>
+          <Hidden smUp>
+          <img  style={{maxHeight:'35px',width:'auto',marginTop:'10px'}} src='/devEngineLogo.png'></img>
+          
+          </Hidden>
             </Link>
           </Typography>
-          {/* {auth.isLoggedIn &&<Typography variant="h6" className={classes.title}>
-            {auth.userId}
-          </Typography>} */}
+          <div style={{paddingLeft:'10px',paddingRight:'10px'}}>
+
           <SearchInput></SearchInput>
+          </div>
           {!auth.isLoggedIn && (
             <Link href="/login" color="secondary">
               <ThemeProvider theme={theme}>
@@ -85,7 +92,7 @@ export default function Navigation(props) {
           {auth.isLoggedIn && (
             <div>
               <Hidden smDown>
-                <Button xs={false} onClick={handleMenu} color="inherit">
+                <Button onClick={handleMenu} color="inherit">
                   {auth.name}
                 </Button>
               </Hidden>
