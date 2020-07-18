@@ -52,9 +52,9 @@ export default function Index() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="/admin">
+              <Link href="/contact">
                 <Button variant="outlined" color="primary">
-                  Admin Panel
+                  Contact Us
                 </Button>
               </Link>
             </Grid>
