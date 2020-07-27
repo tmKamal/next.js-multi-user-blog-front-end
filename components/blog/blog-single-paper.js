@@ -8,6 +8,7 @@ import moment from "moment";
 
 import RelatedBlogCard from "./related-blog-card";
 import DisqusThread from "../disqus";
+import hljs from 'highlight.js';
 
 const useStyles = makeStyles((theme) => ({
   blogContentWrapper: {
@@ -36,6 +37,14 @@ function SingleBlogPost({ bPost }) {
   const classes = useStyles();
   const { isLoading, error, sendRequest, errorPopupCloser } = useHttpClient();
   const [loadedRelatedBlogs, setLoadedRelatedBlog] = useState();
+  useEffect(()=>{
+    updateCodeSyntaxHighlighting();
+  },[]);
+  const updateCodeSyntaxHighlighting = () => {
+    document.querySelectorAll("pre").forEach(block => {
+      hljs.highlightBlock(block);
+    });
+  };
 
   console.log(bPost);
   useEffect(() => {
