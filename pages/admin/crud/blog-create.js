@@ -4,6 +4,9 @@ import dynamic from "next/dynamic";
 import { withRouter } from "next/router";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "../../../node_modules/react-quill/dist/quill.snow.css";
+import { QuillModules, QuillFormats } from "../../../helpers/quill";
+import hljs from 'highlight.js';
+import 'highlight.js/styles/darcula.css'
 
 import {
   makeStyles,
@@ -31,7 +34,10 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
-import { QuillModules, QuillFormats } from "../../../helpers/quill";
+
+hljs.configure({
+  languages: ['javascript', 'ruby', 'python', 'rust'],
+})
 
 const useStyles = makeStyles((theme) => ({
   root: {
