@@ -9,6 +9,7 @@ import moment from "moment";
 import RelatedBlogCard from "./related-blog-card";
 import DisqusThread from "../disqus";
 import hljs from 'highlight.js';
+import 'highlight.js/styles/darcula.css'
 
 const useStyles = makeStyles((theme) => ({
   blogContentWrapper: {
