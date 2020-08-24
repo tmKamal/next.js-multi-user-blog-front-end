@@ -120,8 +120,8 @@ const UpdateBlog = ({ router }) => {
     console.log(router);
     const fetchBlog = async () => {
       try {
-        errorPopupCloser();
         setLoadedBlog(await sendRequest(`${API}/blog/${router.query.slug}`));
+        errorPopupCloser();
         //console.log(loadedBlog);
       } catch (err) {}
     };
