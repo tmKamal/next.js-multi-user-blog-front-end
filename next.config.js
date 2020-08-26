@@ -13,7 +13,7 @@ module.exports=withCSS({
         API_DEVELOPMENT:'http://localhost:8000/api',
         PRODUCTION:process.env.PRODUCTION || false,
         DOMAIN_DEVELOPMENT:'http://localhost:3000',
-        DOMAIN_PRODUCTION:'https://bloggler.herokuapp.com',
+        DOMAIN_PRODUCTION:'https://bloggler.vercel.app',
         FB_APP_ID:'6987fsak',
         DISQUS_SHORTNAME:'bloggler'
         //DEV_IMG:'http://localhost:8000',
